@@ -1707,6 +1707,7 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
       actionType: 'PATCH_VULNERABILITY',
       targetAssetId: 'bengaluru-cbs-db-cluster.apexbank.internal',
       targetCveId: 'CVE-2021-44228',
+      controlCode: 'PATCH_MGMT',
       cost: 2500000,
       estimatedRiskReduction: 42.0,
       estimatedEalReduction: 1850000,
@@ -1723,6 +1724,31 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
       estimatedEalReduction: 980000,
     };
 
+    const allActions = [action2, action1, action3];
+    
+    // Strategy A: Max Risk Reduction within budget
+    const selectedA = allActions.filter(a => a.cost <= budget);
+    if (selectedA.length === 0) selectedA.push(action1);
+    const totalCostA = selectedA.reduce((sum, a) => sum + a.cost, 0);
+    const totalRiskRedA = Number(selectedA.reduce((sum, a) => sum + a.estimatedRiskReduction, 0).toFixed(1));
+    const totalEalRedA = selectedA.reduce((sum, a) => sum + a.estimatedEalReduction, 0);
+    const rosiA = Math.round(((totalEalRedA - totalCostA) / totalCostA) * 100);
+
+    // Strategy B: Max ROSI
+    const selectedB = [action1];
+    if (budget >= 4000000) selectedB.push(action2);
+    const totalCostB = selectedB.reduce((sum, a) => sum + a.cost, 0);
+    const totalRiskRedB = Number(selectedB.reduce((sum, a) => sum + a.estimatedRiskReduction, 0).toFixed(1));
+    const totalEalRedB = selectedB.reduce((sum, a) => sum + a.estimatedEalReduction, 0);
+    const rosiB = Math.round(((totalEalRedB - totalCostB) / totalCostB) * 100);
+
+    // Strategy C: Balanced
+    const selectedC = budget >= 5000000 ? [action1, action3] : [action1];
+    const totalCostC = selectedC.reduce((sum, a) => sum + a.cost, 0);
+    const totalRiskRedC = Number(selectedC.reduce((sum, a) => sum + a.estimatedRiskReduction, 0).toFixed(1));
+    const totalEalRedC = selectedC.reduce((sum, a) => sum + a.estimatedEalReduction, 0);
+    const rosiC = Math.round(((totalEalRedC - totalCostC) / totalCostC) * 100);
+
     return {
       success: true,
       data: {
@@ -1738,45 +1764,45 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
             strategyName: 'Strategy A: Maximum Risk & Loss Reduction',
             strategyType: 'MAX_REDUCTION',
             description: 'Prioritizes highest enterprise risk & EAL loss reduction within allocated budget.',
-            selectedActions: [action2, action1],
-            totalCost: Math.min(budget, 2500000),
-            remainingBudget: Math.max(0, budget - 2500000),
-            totalRiskReduction: 42.0,
-            totalEalReduction: 1850000,
-            netFinancialBenefit: 1850000 - Math.min(budget, 2500000),
-            rosiPct: 340,
-            rosiRatio: 3.4,
-            actionCount: 2,
+            selectedActions: selectedA,
+            totalCost: totalCostA,
+            remainingBudget: Math.max(0, budget - totalCostA),
+            totalRiskReduction: totalRiskRedA,
+            totalEalReduction: totalEalRedA,
+            netFinancialBenefit: totalEalRedA - totalCostA,
+            rosiPct: Math.max(0, rosiA),
+            rosiRatio: Number((totalEalRedA / totalCostA).toFixed(1)),
+            actionCount: selectedA.length,
           },
           {
             strategyId: 'STRATEGY_B_BALANCED_ROSI',
             strategyName: 'Strategy B: Optimal ROSI Capital Efficiency',
             strategyType: 'MAX_ROSI',
             description: 'Maximizes Return on Security Investment (ROSI) ratio for maximum capital efficiency.',
-            selectedActions: [action1],
-            totalCost: Math.min(budget, 1500000),
-            remainingBudget: Math.max(0, budget - 1500000),
-            totalRiskReduction: 38.5,
-            totalEalReduction: 1250000,
-            netFinancialBenefit: 1250000 - Math.min(budget, 1500000),
-            rosiPct: 450,
-            rosiRatio: 4.5,
-            actionCount: 1,
+            selectedActions: selectedB,
+            totalCost: totalCostB,
+            remainingBudget: Math.max(0, budget - totalCostB),
+            totalRiskReduction: totalRiskRedB,
+            totalEalReduction: totalEalRedB,
+            netFinancialBenefit: totalEalRedB - totalCostB,
+            rosiPct: Math.max(0, rosiB),
+            rosiRatio: Number((totalEalRedB / totalCostB).toFixed(1)),
+            actionCount: selectedB.length,
           },
           {
             strategyId: 'STRATEGY_C_BALANCED_COMPREHENSIVE',
             strategyName: 'Strategy C: Balanced Defense-in-Depth Strategy',
             strategyType: 'BALANCED',
             description: 'Combines endpoint EDR blocking, critical patching, and network segmentation.',
-            selectedActions: [action1, action3],
-            totalCost: Math.min(budget, 5000000),
-            remainingBudget: Math.max(0, budget - 5000000),
-            totalRiskReduction: 66.5,
-            totalEalReduction: 2230000,
-            netFinancialBenefit: 2230000 - Math.min(budget, 5000000),
-            rosiPct: 290,
-            rosiRatio: 2.9,
-            actionCount: 2,
+            selectedActions: selectedC,
+            totalCost: totalCostC,
+            remainingBudget: Math.max(0, budget - totalCostC),
+            totalRiskReduction: totalRiskRedC,
+            totalEalReduction: totalEalRedC,
+            netFinancialBenefit: totalEalRedC - totalCostC,
+            rosiPct: Math.max(0, rosiC),
+            rosiRatio: Number((totalEalRedC / totalCostC).toFixed(1)),
+            actionCount: selectedC.length,
           },
         ],
       },
@@ -1784,15 +1810,31 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
   }
 
   if (options.method === 'POST' && url.includes('/scenarios/simulate')) {
+    const bodyStr = typeof options.body === 'string' ? options.body : '{}';
+    let appliedControlsCount = 0;
+    let patchedCveCount = 0;
+    try {
+      const b = JSON.parse(bodyStr);
+      if (Array.isArray(b.appliedControlCodes)) appliedControlsCount = b.appliedControlCodes.length;
+      if (Array.isArray(b.patchedCveIds)) patchedCveCount = b.patchedCveIds.length;
+    } catch {}
+
+    const baselineRiskScore = 64.2;
+    const baselineEal = 45000000;
+    const riskReduction = Number(((appliedControlsCount * 12.5) + (patchedCveCount * 18.0) || 24.5).toFixed(1));
+    const simulatedRiskScore = Number(Math.max(12.0, baselineRiskScore - riskReduction).toFixed(1));
+    const ealSavings = Math.min(baselineEal - 5000000, (appliedControlsCount * 11250000) + (patchedCveCount * 11250000) || 22500000);
+    const simulatedEal = Math.max(2500000, baselineEal - ealSavings);
+
     return {
       success: true,
       data: {
-        baselineRiskScore: 64.2,
-        simulatedRiskScore: 39.7,
-        riskReduction: 24.5,
-        baselineEal: 45000000,
-        simulatedEal: 22500000,
-        ealSavings: 22500000,
+        baselineRiskScore,
+        simulatedRiskScore,
+        riskReduction,
+        baselineEal,
+        simulatedEal,
+        ealSavings,
       },
     } as unknown as T;
   }
