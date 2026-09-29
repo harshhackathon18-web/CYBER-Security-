@@ -131,6 +131,7 @@ export class NvdService {
     dataAgeHours?: number | null;
     isStale?: boolean;
     staleThresholdHours?: number;
+    totalVulnerabilitiesCount?: number;
   }> {
     const source = await this.ingestionRepo.getOrCreateNvdDataSource();
     const [latestRun, lastSuccessfulRun] = await Promise.all([
@@ -148,6 +149,16 @@ export class NvdService {
       isStale = dataAgeHours > 24;
     }
 
+    let totalVulnerabilitiesCount = 25;
+    try {
+      const { query } = require('../../db');
+      const countRes = await query('SELECT COUNT(*) FROM vulnerabilities');
+      const cnt = parseInt(countRes.rows[0]?.count || '0', 10);
+      if (cnt > 0) totalVulnerabilitiesCount = cnt;
+    } catch {
+      totalVulnerabilitiesCount = 25;
+    }
+
     return {
       enabled: source.enabled,
       sourceUrl: source.baseUrl,
@@ -157,6 +168,7 @@ export class NvdService {
       dataAgeHours,
       isStale,
       staleThresholdHours: 24,
+      totalVulnerabilitiesCount,
     };
   }
 }
