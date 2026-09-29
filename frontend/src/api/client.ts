@@ -569,6 +569,26 @@ const FALLBACK_DATA: Record<string, any> = {
     totalEal: 45000000,
     currency: 'INR',
   },
+  '/api/compliance/frameworks': {
+    frameworks: [
+      { id: 'fw-rbi-csf', code: 'RBI_CSF', name: 'RBI Cyber Security Framework for Banks' },
+      { id: 'fw-sebi-cs', code: 'SEBI_CS', name: 'SEBI Cybersecurity Framework' },
+      { id: 'fw-cis-v8', code: 'CIS_V8', name: 'CIS Critical Security Controls v8' },
+      { id: 'fw-nist-csf', code: 'NIST_CSF', name: 'NIST Cybersecurity Framework v2.0' },
+      { id: 'fw-iso-27001', code: 'ISO_27001', name: 'ISO/IEC 27001:2022' },
+    ],
+    total: 5,
+  },
+  '/api/v1/compliance/frameworks': {
+    frameworks: [
+      { id: 'fw-rbi-csf', code: 'RBI_CSF', name: 'RBI Cyber Security Framework for Banks' },
+      { id: 'fw-sebi-cs', code: 'SEBI_CS', name: 'SEBI Cybersecurity Framework' },
+      { id: 'fw-cis-v8', code: 'CIS_V8', name: 'CIS Critical Security Controls v8' },
+      { id: 'fw-nist-csf', code: 'NIST_CSF', name: 'NIST Cybersecurity Framework v2.0' },
+      { id: 'fw-iso-27001', code: 'ISO_27001', name: 'ISO/IEC 27001:2022' },
+    ],
+    total: 5,
+  },
   '/api/v1/optimization/candidates': {
     data: {
       budgetLimit: 2500000,
