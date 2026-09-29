@@ -213,7 +213,7 @@ export const ThreatIntel: React.FC = () => {
                   </div>
                 ))}
               </div>
-            ) : kevData && kevData.data.length > 0 ? (
+            ) : (Array.isArray(kevData?.data) && kevData.data.length > 0) || (Array.isArray((kevData as any)?.items) && (kevData as any).items.length > 0) ? (
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -226,8 +226,8 @@ export const ThreatIntel: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {kevData.data.map((item) => (
-                    <TableRow key={item.id} className="group">
+                  {(Array.isArray(kevData?.data) ? kevData!.data : ((kevData as any)?.items || [])).map((item: any) => (
+                    <TableRow key={item.id || item.cveId} className="group">
                       <TableCell className="font-bold font-mono text-brand-primary">{item.cveId}</TableCell>
                       <TableCell>
                         <div className="flex flex-col text-xs">

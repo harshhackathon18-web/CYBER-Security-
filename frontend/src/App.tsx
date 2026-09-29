@@ -5,6 +5,7 @@ import { Header } from './components/layout/Header';
 import { PageContainer } from './components/layout/PageContainer';
 import { WorkspaceProvider } from './context/WorkspaceContext';
 import { DemoIndicator } from './components/common/DemoIndicator';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 
 import { Integrations } from './pages/Integrations';
@@ -37,26 +38,28 @@ export const App: React.FC = () => {
             <Header />
             {/* Main Page Container */}
             <PageContainer>
-              <Routes>
-                <Route path="/" element={<Navigate to="/integrations" replace />} />
-                <Route path="/demo" element={<JudgeDemoExperience />} />
-                <Route path="/integrations" element={<Integrations />} />
-                <Route path="/vulnerabilities" element={<Vulnerabilities />} />
-                <Route path="/vulnerabilities/:cveId" element={<VulnerabilityDetail />} />
-                <Route path="/assets" element={<Assets />} />
-                <Route path="/controls" element={<Controls />} />
-                <Route path="/threat-intel" element={<ThreatIntel />} />
-                <Route path="/breach-containment" element={<BreachContainmentAgent />} />
-                <Route path="/risk-overview" element={<RiskOverview />} />
-                <Route path="/financial-exposure" element={<FinancialExposure />} />
-                <Route path="/what-if-simulator" element={<WhatIfSimulator />} />
-                <Route path="/investment-optimizer" element={<InvestmentOptimizer />} />
-                <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
-                <Route path="/compliance" element={<Compliance />} />
-                <Route path="/attack-path" element={<AttackPath />} />
-                <Route path="/ai-assistant" element={<AIAssistant />} />
-                <Route path="*" element={<Navigate to="/demo" replace />} />
-              </Routes>
+              <ErrorBoundary>
+                <Routes>
+                  <Route path="/" element={<Navigate to="/integrations" replace />} />
+                  <Route path="/demo" element={<JudgeDemoExperience />} />
+                  <Route path="/integrations" element={<Integrations />} />
+                  <Route path="/vulnerabilities" element={<Vulnerabilities />} />
+                  <Route path="/vulnerabilities/:cveId" element={<VulnerabilityDetail />} />
+                  <Route path="/assets" element={<Assets />} />
+                  <Route path="/controls" element={<Controls />} />
+                  <Route path="/threat-intel" element={<ThreatIntel />} />
+                  <Route path="/breach-containment" element={<BreachContainmentAgent />} />
+                  <Route path="/risk-overview" element={<RiskOverview />} />
+                  <Route path="/financial-exposure" element={<FinancialExposure />} />
+                  <Route path="/what-if-simulator" element={<WhatIfSimulator />} />
+                  <Route path="/investment-optimizer" element={<InvestmentOptimizer />} />
+                  <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
+                  <Route path="/compliance" element={<Compliance />} />
+                  <Route path="/attack-path" element={<AttackPath />} />
+                  <Route path="/ai-assistant" element={<AIAssistant />} />
+                  <Route path="*" element={<Navigate to="/demo" replace />} />
+                </Routes>
+              </ErrorBoundary>
             </PageContainer>
           </div>
         </div>
