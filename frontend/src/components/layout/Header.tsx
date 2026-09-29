@@ -125,10 +125,10 @@ export const Header: React.FC = () => {
         <div className="gov-org-badge">
           <Building2 size={14} color="#0F172A" />
           <span style={{ fontWeight: 700, color: 'var(--text-dark)', fontSize: 12 }}>
-            {activeOrg.name}
+            {activeOrg?.name || 'Bharat Digital Financial Services'}
           </span>
           <span className="currency-tag" style={{ background: '#0284C7' }}>
-            {activeOrg.currency || 'INR'} ₹
+            {activeOrg?.currency || 'INR'} ₹
           </span>
         </div>
       </div>

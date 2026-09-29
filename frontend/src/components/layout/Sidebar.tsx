@@ -135,7 +135,7 @@ export const Sidebar: React.FC = () => {
           </div>
           <div style={{ overflow: 'hidden' }}>
             <div style={{ fontSize: 11.5, fontWeight: 700, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {activeOrg.name}
+              {activeOrg?.name || 'Bharat Digital Financial Services'}
             </div>
             <div style={{ fontSize: 9.5, color: '#64748B', marginTop: 1 }}>
               Enterprise Operations

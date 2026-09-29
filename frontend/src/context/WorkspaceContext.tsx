@@ -114,7 +114,18 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({ children 
 export const useWorkspace = (): WorkspaceContextType => {
   const context = useContext(WorkspaceContext);
   if (!context) {
-    throw new Error('useWorkspace must be used within a WorkspaceProvider');
+    return {
+      activeOrg: DEFAULT_DEMO_ORG,
+      organizations: [DEFAULT_DEMO_ORG],
+      setActiveOrg: () => {},
+      isDemoMode: true,
+      demoJourneyStep: 1,
+      setDemoJourneyStep: () => {},
+      nextJourneyStep: () => {},
+      prevJourneyStep: () => {},
+      showFirstTimeTour: false,
+      setShowFirstTimeTour: () => {},
+    };
   }
   return context;
 };
