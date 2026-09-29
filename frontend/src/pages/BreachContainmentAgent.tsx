@@ -187,28 +187,28 @@ export const BreachContainmentAgent: React.FC = () => {
     await delay(350);
 
     // Step 1: Firewall
-    addLog('FIREWALL', `Constructing Zero-Trust network isolation rules for ${serverName}`, 'info', data.actions[0]?.command);
+    addLog('FIREWALL', `Constructing Zero-Trust network isolation rules for ${serverName}`, 'info', data?.actions?.[0]?.command);
     await delay(400);
     addLog('FIREWALL', `[SUCCESS] Applied egress DROP filter. SSH/Management continuity verified on Port 22.`, 'success');
     setExecutionProgress(75);
 
     // Step 2: Process Suppression
     await delay(350);
-    addLog('PROCESS_KILL', `Targeting malicious execution tree: [${data.actions[1]?.title}]`, 'info', data.actions[1]?.command);
+    addLog('PROCESS_KILL', `Targeting malicious execution tree: [${data?.actions?.[1]?.title || 'Rogue C2 Execution'}]`, 'info', data?.actions?.[1]?.command);
     await delay(450);
     addLog('PROCESS_KILL', `[SUCCESS] Rogue handles neutralized. SIGKILL dispatched to suspicious PID tree.`, 'success');
     setExecutionProgress(85);
 
     // Step 3: Auth Revocation
     await delay(300);
-    addLog('AUTH_REVOKE', `Revoking compromised service account tokens & Kerberos ticket cache...`, 'info', data.actions[2]?.command);
+    addLog('AUTH_REVOKE', `Revoking compromised service account tokens & Kerberos ticket cache...`, 'info', data?.actions?.[2]?.command);
     await delay(400);
     addLog('AUTH_REVOKE', `[SUCCESS] Auth tokens invalidated. HTTP 401 Unauthorized enforced for rogue sessions.`, 'success');
     setExecutionProgress(92);
 
     // Step 4: Forensics
     await delay(300);
-    addLog('FORENSICS', `Preserving volatile memory dump to /var/log/forensics_memdump.raw...`, 'info', data.actions[3]?.command);
+    addLog('FORENSICS', `Preserving volatile memory dump to /var/log/forensics_memdump.raw...`, 'info', data?.actions?.[3]?.command);
     await delay(350);
     addLog('FORENSICS', `[SUCCESS] Memory dump complete. SHA-256 Digest: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, 'success');
 
@@ -216,7 +216,8 @@ export const BreachContainmentAgent: React.FC = () => {
     await delay(300);
     addLog('COMPLIANCE', `Formulating mandatory RBI CSITE & CERT-In 6-hour incident disclosure reports...`, 'info');
     await delay(300);
-    addLog('COMPLETE', `[CONTAINED] All 5 Zero-Trust Containment stages ready. Estimated Loss Mitigated: ₹${(data.estimatedFinancialSavedInr / 10000000).toFixed(2)} Crore.`, 'success');
+    const savedInr = data?.estimatedFinancialSavedInr || 22500000;
+    addLog('COMPLETE', `[CONTAINED] All 5 Zero-Trust Containment stages ready. Estimated Loss Mitigated: ₹${(savedInr / 10000000).toFixed(2)} Crore.`, 'success');
 
     setExecutionProgress(100);
     setAgentPhase('CONTAINED');

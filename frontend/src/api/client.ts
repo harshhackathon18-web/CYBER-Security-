@@ -514,6 +514,89 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
     } as unknown as T;
   }
 
+  if (url.includes('contain-breach')) {
+    const bodyStr = typeof options.body === 'string' ? options.body : '{}';
+    let sName = 'mumbai-upi-switch-01.apexbank.internal';
+    let sIp = '192.168.1.10';
+    try {
+      const b = JSON.parse(bodyStr);
+      if (b.serverName) sName = b.serverName;
+      if (b.ipAddress) sIp = b.ipAddress;
+    } catch {}
+
+    return {
+      success: true,
+      data: {
+        containmentId: `cnt-${Date.now()}`,
+        serverId: 'srv-mumbai-01',
+        serverName: sName,
+        threatLevel: 'CRITICAL',
+        containmentStatus: 'CONTAINED & ISOLATED',
+        mitigationSummary: `Zero-Trust automated isolation successfully executed on ${sName} (${sIp}). Malicious C2 outbound streams neutralized, session tokens invalidated, and forensic memory dump captured.`,
+        actions: [
+          {
+            actionId: 'act-fw-drop',
+            stepNumber: 1,
+            title: 'Isolate Network via IPTables Egress DROP',
+            category: 'FIREWALL_ISOLATION',
+            command: `sudo iptables -A OUTPUT -p tcp ! --dport 22 -d ${sIp} -j DROP`,
+            executionType: 'AUTOMATED',
+            impactAssessment: 'Blocks lateral movement & active C2 exfiltration while preserving SSH management session.',
+            verificationCheck: `ping -c 1 8.8.8.8 returns network unreachable on ${sIp}.`,
+          },
+          {
+            actionId: 'act-kill-proc',
+            stepNumber: 2,
+            title: 'Terminate Rogue Process Tree (SIGKILL)',
+            category: 'PROCESS_KILL',
+            command: 'sudo pkill -9 -f "kworker_malware|c2_beacon"',
+            executionType: 'AUTOMATED',
+            impactAssessment: 'Terminates unauthorized binary execution and releases CPU/RAM resource locks.',
+            verificationCheck: 'ps aux | grep -E "kworker_malware|c2_beacon" returns empty.',
+          },
+          {
+            actionId: 'act-revoke-auth',
+            stepNumber: 3,
+            title: 'Revoke Service Account Tokens & Ticket Cache',
+            category: 'CREDENTIAL_REVOCATION',
+            command: 'sudo kdestroy -A && redis-cli flushdb',
+            executionType: 'AUTOMATED',
+            impactAssessment: 'Invalidates hijacked Kerberos tickets & active JWT session cookies.',
+            verificationCheck: 'Auth logs confirm 401 Unauthorized responses for prior session IDs.',
+          },
+          {
+            actionId: 'act-dump-forensics',
+            stepNumber: 4,
+            title: 'Capture Volatile Memory Dump for Incident Response',
+            category: 'FORENSICS',
+            command: 'sudo lime-forensics --output /var/log/forensics_memdump.raw',
+            executionType: 'AUTOMATED',
+            impactAssessment: 'Preserves active RAM artifacts for CERT-In / RBI regulatory analysis.',
+            verificationCheck: 'File /var/log/forensics_memdump.raw created with SHA-256 checksum recorded.',
+          },
+          {
+            actionId: 'act-compliance-report',
+            stepNumber: 5,
+            title: 'Dispatch CERT-In & RBI Cyber Incident Disclosure',
+            category: 'COMPLIANCE',
+            command: 'curl -X POST https://cert-in.org.in/api/v1/incidents/submit -d @incident_payload.json',
+            executionType: 'AUTOMATED',
+            impactAssessment: 'Ensures compliance with 6-hour CERT-In mandate and RBI CSITE directions.',
+            verificationCheck: 'Incident Ticket #CERT-2026-88491 generated and logged.',
+          },
+        ],
+        estimatedFinancialSavedInr: 22500000,
+        uncheckedLossInr: 45000000,
+        containedLossInr: 2250000,
+        complianceMandates: ['CERT-In 6-Hour Disclosure Rule', 'RBI CSITE Master Direction', 'DPDP Act 2023 Sec 8'],
+        automatedScriptBash: '#!/bin/bash\n# Zero-Trust Emergency Containment Script\necho "Applying network drop filters..."\nsudo iptables -A OUTPUT -p tcp ! --dport 22 -j DROP\necho "Killing malicious PIDs..."\nsudo pkill -9 -f "kworker_malware"\necho "Containment Complete."',
+        automatedScriptPowershell: '# PowerShell Emergency Containment Script\nNew-NetFirewallRule -DisplayName "Emergency Isolation" -Direction Outbound -Action Block\nStop-Process -Name "kworker_malware" -Force\nWrite-Host "Containment Complete."',
+        evaluatedAt: new Date().toISOString(),
+        modelVersion: 'v1.4-production',
+      },
+    } as unknown as T;
+  }
+
   if (FALLBACK_DATA[cleanPath]) {
     return FALLBACK_DATA[cleanPath] as T;
   }
