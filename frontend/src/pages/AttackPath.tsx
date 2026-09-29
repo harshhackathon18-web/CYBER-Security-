@@ -21,7 +21,8 @@ export const AttackPath: React.FC = () => {
       setRecalculating(true);
 
       const res = await attackPathsApi.getAttackGraph(activeOrg?.id);
-      setGraphData(res.data);
+      const unwrapped = (res as any)?.data ? (res as any).data : res;
+      setGraphData(unwrapped);
       setHasRun(true);
       setLastUpdated(new Date().toLocaleTimeString());
     } catch (err: any) {
@@ -214,7 +215,7 @@ export const AttackPath: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-app-border">
-                    {graphData.chokePoints.map(cp => (
+                    {(graphData?.chokePoints || []).map(cp => (
                       <tr key={cp.assetId} className="hover:bg-gray-50/50">
                         <td className="px-4 py-3 font-bold text-text-primary">
                           {formatEntityName(cp.assetName, cp.assetId)}
@@ -246,7 +247,7 @@ export const AttackPath: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-app-border">
-                    {graphData.discoveredPaths.slice(0, 5).map(p => {
+                    {(graphData?.discoveredPaths || []).slice(0, 5).map(p => {
                       const isExpanded = !!expandedPaths[p.pathId];
                       const isGenerating = !!generatingPaths[p.pathId];
 
