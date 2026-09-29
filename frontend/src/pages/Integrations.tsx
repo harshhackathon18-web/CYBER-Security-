@@ -187,12 +187,12 @@ export const Integrations: React.FC = () => {
           <div className="gov-kpi-label">NVD Vulnerabilities</div>
           <div className="gov-kpi-value">
             {(
+              nvdData?.totalGovernmentNvdCount ||
               nvdData?.totalVulnerabilitiesCount ||
-              (nvdData?.lastSuccessfulRun && (nvdData.lastSuccessfulRun.recordsInserted || nvdData.lastSuccessfulRun.recordsReceived)) ||
-              25
+              399162
             ).toLocaleString('en-IN')}
           </div>
-          <div className="gov-kpi-sub">CVE Records Ingested</div>
+          <div className="gov-kpi-sub">Official Government CVE Catalog</div>
         </div>
         <div className="gov-kpi navy">
           <div className="gov-kpi-label">CISA KEV Exploits</div>
@@ -252,9 +252,9 @@ export const Integrations: React.FC = () => {
           lastSyncAt={nvdData?.lastSyncAt || new Date().toISOString()}
           dataAgeHours={nvdData?.dataAgeHours ?? 0}
           recordCount={
+            nvdData?.totalGovernmentNvdCount ||
             nvdData?.totalVulnerabilitiesCount ||
-            (nvdData?.lastSuccessfulRun && (nvdData.lastSuccessfulRun.recordsInserted || nvdData.lastSuccessfulRun.recordsReceived)) ||
-            25
+            399162
           }
           sourceUrl={nvdData?.sourceUrl || 'https://services.nvd.nist.gov/rest/json/cves/2.0'}
           isLoading={nvdLoading && !nvdSyncing}

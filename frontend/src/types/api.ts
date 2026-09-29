@@ -13,6 +13,8 @@ export interface NvdStatusResponse {
   dataAgeHours?: number | null;
   isStale?: boolean;
   staleThresholdHours?: number;
+  totalGovernmentNvdCount?: number;
+  totalVulnerabilitiesCount?: number;
 }
 
 export interface CisaKevStatusResponse {

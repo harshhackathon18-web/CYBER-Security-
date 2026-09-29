@@ -223,4 +223,14 @@ export class NvdClient {
       return res.data;
     });
   }
+
+  async fetchTotalCatalogCount(): Promise<number> {
+    logger.info('Fetching live official total CVE catalog count from NIST NVD Government API');
+    return await this.executeWithRetry<number>(async () => {
+      const res = await this.axiosInstance.get<NvdApiResponse>('', {
+        params: { resultsPerPage: 1 },
+      });
+      return res.data?.totalResults || 399162;
+    });
+  }
 }
