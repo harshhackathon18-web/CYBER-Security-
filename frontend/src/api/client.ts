@@ -127,6 +127,14 @@ const FALLBACK_DATA: Record<string, any> = {
     totalCount: 4,
     page: 1,
     limit: 20,
+    pagination: {
+      page: 1,
+      limit: 10,
+      total: 4,
+      totalPages: 1,
+      hasNext: false,
+      hasPrevious: false,
+    },
   },
   '/api/v1/assets': {
     data: [
@@ -374,6 +382,60 @@ const FALLBACK_DATA: Record<string, any> = {
     mitreTacticsCount: 14,
     mitreTechniquesCount: 712,
     vcdbRecordCount: 10003,
+  },
+  '/api/threat-intel/kev': {
+    data: [
+      {
+        id: 'kev-log4j-01',
+        cveId: 'CVE-2021-44228',
+        vendorProject: 'Apache',
+        product: 'Log4j2',
+        vulnerabilityName: 'Apache Log4j2 Remote Code Execution Vulnerability',
+        dateAdded: '2021-12-10',
+        shortDescription: 'Apache Log4j2 contains a remote code execution vulnerability.',
+        requiredAction: 'Apply mitigations per vendor instructions or update to fixed versions.',
+        dueDate: '2021-12-24',
+        knownRansomwareCampaignUse: 'Known',
+      },
+      {
+        id: 'kev-confluence-01',
+        cveId: 'CVE-2023-22515',
+        vendorProject: 'Atlassian',
+        product: 'Confluence Data Center & Server',
+        vulnerabilityName: 'Atlassian Confluence Data Center Privilege Escalation Vulnerability',
+        dateAdded: '2023-10-04',
+        shortDescription: 'Atlassian Confluence Data Center and Server contain a privilege escalation vulnerability.',
+        requiredAction: 'Apply patches immediately per vendor security advisory.',
+        dueDate: '2023-10-18',
+        knownRansomwareCampaignUse: 'Known',
+      },
+    ],
+    pagination: {
+      page: 1,
+      limit: 10,
+      total: 2,
+      totalPages: 1,
+      hasNext: false,
+      hasPrevious: false,
+    },
+  },
+  '/api/threat-intel/attack/tactics': {
+    tactics: [
+      { id: 'tactic-initial-access', attackId: 'TA0001', name: 'Initial Access', description: 'Gaining entry to the network.' },
+      { id: 'tactic-execution', attackId: 'TA0002', name: 'Execution', description: 'Running malicious code.' },
+      { id: 'tactic-persistence', attackId: 'TA0003', name: 'Persistence', description: 'Maintaining access across restarts.' },
+      { id: 'tactic-priv-esc', attackId: 'TA0004', name: 'Privilege Escalation', description: 'Gaining higher-level permissions.' },
+      { id: 'tactic-defense-evasion', attackId: 'TA0005', name: 'Defense Evasion', description: 'Avoiding detection.' },
+    ],
+  },
+  '/api/threat-intel/attack/techniques': {
+    techniques: [
+      { id: 'tech-exploit-public-app', attackId: 'T1190', name: 'Exploit Public-Facing Application' },
+      { id: 'tech-phishing', attackId: 'T1566', name: 'Phishing' },
+      { id: 'tech-command-interpreter', attackId: 'T1059', name: 'Command and Scripting Interpreter' },
+      { id: 'tech-valid-accounts', attackId: 'T1078', name: 'Valid Accounts' },
+      { id: 'tech-os-dump', attackId: 'T1003', name: 'OS Credential Dumping' },
+    ],
   },
 };
 

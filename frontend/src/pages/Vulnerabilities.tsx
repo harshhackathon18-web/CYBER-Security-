@@ -210,7 +210,7 @@ export const Vulnerabilities: React.FC = () => {
         )}
 
         {/* Pagination */}
-        {!error && !loading && data && data.pagination.total > 0 && (
+        {!error && !loading && data && data.pagination && data.pagination.total > 0 && (
           <div className="px-6 py-4 border-t border-app-border flex items-center justify-between bg-app-surfaceSecondary rounded-b-lg">
             <div className="text-sm text-text-secondary">
               Showing <span className="font-bold text-text-primary">{((data.pagination.page - 1) * data.pagination.limit) + 1}</span> to <span className="font-bold text-text-primary">{Math.min(data.pagination.page * data.pagination.limit, data.pagination.total)}</span> of <span className="font-bold text-text-primary">{data.pagination.total.toLocaleString()}</span> entries
@@ -229,7 +229,7 @@ export const Vulnerabilities: React.FC = () => {
                 variant="outline"
                 className="py-1 px-3 text-xs"
                 disabled={!data.pagination.hasNext}
-                onClick={() => setPage(p => Math.min(data.pagination.totalPages, p + 1))}
+                onClick={() => setPage(p => Math.min(data.pagination.totalPages || 1, p + 1))}
               >
                 Next
                 <ChevronRight className="w-4 h-4 ml-1" />
