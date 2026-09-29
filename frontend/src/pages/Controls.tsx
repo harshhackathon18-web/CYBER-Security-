@@ -29,10 +29,11 @@ export const Controls: React.FC = () => {
   }, [fetchControls]);
 
   // Derived state
-  const totalAssetsAssigned = data && data.controls.length > 0 
-    ? Math.max(...data.controls.map(c => c.totalAssetsAssigned)) 
+  const controlsList = data?.controls || [];
+  const totalAssetsAssigned = controlsList.length > 0 
+    ? Math.max(...controlsList.map(c => c.totalAssetsAssigned || 0)) 
     : 0;
-  const catalogCount = data?.totalCatalogControls || 0;
+  const catalogCount = data?.totalCatalogControls || controlsList.length || 0;
 
   return (
     <div className="space-y-6">
@@ -134,7 +135,7 @@ export const Controls: React.FC = () => {
 
           {/* Control Cards Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {data?.controls.map((control) => (
+            {controlsList.map((control) => (
               <div key={control.code} className="bg-app-surface border border-app-border rounded-lg overflow-hidden flex flex-col shadow-2xs hover:border-brand-primary/30 transition-colors">
                 <div className="p-6 border-b border-app-border relative">
                   <div className="flex justify-between items-start mb-2 relative z-10">
