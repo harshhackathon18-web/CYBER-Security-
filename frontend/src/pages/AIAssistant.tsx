@@ -42,10 +42,10 @@ export const AIAssistant: React.FC = () => {
 
       if (reqType === 'EXPLAIN_RISK') {
         const res = await assistantApi.explainRisk({ assetId: selectedAssetKey, cveId: cveId.trim() || undefined });
-        setResponse(res.data);
+        setResponse(res?.data ? res.data : (res as any));
       } else if (reqType === 'EXPLAIN_FINANCIAL') {
         const res = await assistantApi.explainFinancial({ assetId: selectedAssetKey, cveId: cveId.trim() || undefined });
-        setResponse(res.data);
+        setResponse(res?.data ? res.data : (res as any));
       } else if (reqType === 'COMPARE_STRATEGIES') {
         if (!optimizationResultId.trim()) {
           setError('Optimization Result ID is required for strategy comparison.');
@@ -56,7 +56,7 @@ export const AIAssistant: React.FC = () => {
           optimizationResultId: optimizationResultId.trim(),
           strategyIds: [strategyIdA.trim(), strategyIdB.trim()],
         });
-        setResponse(res.data);
+        setResponse(res?.data ? res.data : (res as any));
       }
     } catch (err: any) {
       setError(err.message || 'Failed to generate explanation.');

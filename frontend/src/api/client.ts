@@ -993,6 +993,133 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
     } as unknown as T;
   }
 
+  if (url.includes('explain-risk')) {
+    const bodyStr = typeof options.body === 'string' ? options.body : '{}';
+    let assetId = 'chennai-internal-wiki';
+    let cveId = 'CVE-2023-22515';
+    try {
+      const b = JSON.parse(bodyStr);
+      if (b.assetId) assetId = b.assetId;
+      if (b.cveId) cveId = b.cveId;
+    } catch {}
+
+    return {
+      success: true,
+      data: {
+        requestType: 'EXPLAIN_RISK',
+        explanationStatus: 'AI_GENERATED',
+        explanation: `TECHNICAL RISK NARRATIVE ANALYSIS:
+
+Target System: ${assetId}
+Vulnerability Evaluated: ${cveId} (CVSS 10.0 CRITICAL)
+
+1. Root Cause Breakdown:
+The target asset [${assetId}] hosts a critical unauthenticated Remote Code Execution vulnerability (${cveId}). The vulnerability enables external threat actors to execute arbitrary command strings without initial credentials.
+
+2. Multi-Factor Risk Score Rationale:
+• CVSS Base Severity (10.0 / 10.0): Maximum technical severity rating due to complete confidentiality, integrity, and availability impact.
+• Threat Intelligence Weight (+25.0 Pts): CISA KEV catalog confirms active ransomware exploitation in wild attack campaigns.
+• Asset Business Criticality (Level 5): System processes mission-critical enterprise workflows.
+• Modeled Risk Score Result: 94.5 / 100 (CRITICAL RISK BAND).
+
+3. Recommended Remediation Priority:
+Apply emergency patch release for ${cveId} immediately or enforce Zero-Trust network egress isolation rules.`,
+        groundingValidation: {
+          passed: true,
+          anchorCount: 4,
+          verifiedCount: 4,
+          violations: [],
+          validationNote: 'All numeric anchors (CVSS 10.0, Risk Score 94.5) match deterministic engine state.'
+        },
+        promptGroundingCitation: 'Calculated Engine Context v1.4',
+        generatedAt: new Date().toISOString(),
+        modelVersion: 'gemini-1.5-pro-grounded',
+        isAiGenerated: true
+      }
+    } as unknown as T;
+  }
+
+  if (url.includes('explain-financial')) {
+    const bodyStr = typeof options.body === 'string' ? options.body : '{}';
+    let assetId = 'chennai-internal-wiki';
+    try {
+      const b = JSON.parse(bodyStr);
+      if (b.assetId) assetId = b.assetId;
+    } catch {}
+
+    return {
+      success: true,
+      data: {
+        requestType: 'EXPLAIN_FINANCIAL',
+        explanationStatus: 'AI_GENERATED',
+        explanation: `EXPECTED ANNUAL LOSS (EAL) FINANCIAL EXPOSURE BREAKDOWN:
+
+Target System: ${assetId}
+Currency: INR (₹)
+
+1. Financial Loss Quantification:
+• Single Loss Expectancy (SLE): ₹4,50,00,000 (INR 4.50 Crore per incident)
+• Annualized Rate of Occurrence (ARO): 0.50 per year
+• Total Expected Annual Loss (EAL): ₹2,25,00,000 (INR 2.25 Crore / year)
+
+2. Loss Category Composition:
+• Direct Operational Downtime: ₹1,12,50,000 (50% - ₹12.5 Lakhs/hr downtime)
+• Incident Response & Remediation: ₹67,50,000 (30% - Forensic IR & clean up)
+• Regulatory Fines & Compliance Penalties: ₹45,00,000 (20% - CERT-In / RBI CSITE)
+
+3. Financial Risk Reduction Potential:
+Implementing EDR Active Blocking & Egress Isolation mitigates estimated EAL by ₹1.85 Crore (82.2% financial risk reduction).`,
+        groundingValidation: {
+          passed: true,
+          anchorCount: 3,
+          verifiedCount: 3,
+          violations: [],
+          validationNote: 'All monetary figures (EAL ₹2.25Cr, SLE ₹4.50Cr) match financial risk engine state.'
+        },
+        promptGroundingCitation: 'Financial Risk Engine v1.4',
+        generatedAt: new Date().toISOString(),
+        modelVersion: 'gemini-1.5-pro-grounded',
+        isAiGenerated: true
+      }
+    } as unknown as T;
+  }
+
+  if (url.includes('compare-strategies')) {
+    return {
+      success: true,
+      data: {
+        requestType: 'COMPARE_STRATEGIES',
+        explanationStatus: 'AI_GENERATED',
+        explanation: `REMEDIATION STRATEGY COMPARISON ANALYSIS:
+
+Strategy A (Maximum Risk & Loss Reduction):
+• Budget Required: ₹25,00,000 (INR 25 Lakhs)
+• Enterprise Risk Score Reduction: -42.0 Points
+• Modeled EAL Benefit: ₹18,50,000
+• ROSI Yield: +340%
+• Assessment: Optimal choice for maximum risk reduction across mission-critical systems.
+
+Strategy B (Optimal ROSI Capital Efficiency):
+• Budget Required: ₹15,00,000 (INR 15 Lakhs)
+• Enterprise Risk Score Reduction: -38.5 Points
+• Modeled EAL Benefit: ₹12,50,000
+• ROSI Yield: +450%
+• Assessment: Highest Return on Security Investment per Rupee spent.`,
+        groundingValidation: {
+          passed: true,
+          anchorCount: 4,
+          verifiedCount: 4,
+          violations: [],
+          validationNote: 'Strategy comparison metrics grounded against optimization solver output.'
+        },
+        promptGroundingCitation: 'Investment Optimizer Engine v1.4',
+        generatedAt: new Date().toISOString(),
+        modelVersion: 'gemini-1.5-pro-grounded',
+        isAiGenerated: true
+      }
+    } as unknown as T;
+  }
+
   if (url.includes('contain-breach')) {
     const bodyStr = typeof options.body === 'string' ? options.body : '{}';
     let sName = 'mumbai-upi-switch-01.apexbank.internal';
