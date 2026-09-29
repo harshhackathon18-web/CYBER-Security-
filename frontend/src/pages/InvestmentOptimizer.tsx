@@ -391,44 +391,44 @@ export const InvestmentOptimizer: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {data.strategies.map((strat, idx) => (
-              <div key={strat.strategyId || idx} className="bg-app-surface border border-app-border rounded-lg shadow-2xs overflow-hidden flex flex-col hover:border-sky-300 transition-colors">
+            {(data?.strategies || []).map((strat: any, idx) => (
+              <div key={strat.strategyId || strat.id || idx} className="bg-app-surface border border-app-border rounded-lg shadow-2xs overflow-hidden flex flex-col hover:border-sky-300 transition-colors">
                 <div className="p-4 bg-app-surfaceSecondary border-b border-app-border">
                   <span className="text-[10px] font-bold text-sky-700 uppercase tracking-widest block">Strategy Alternative {idx + 1}</span>
-                  <h4 className="text-sm font-bold text-text-primary mt-0.5">{strat.strategyName}</h4>
-                  <p className="text-xs text-text-secondary mt-1">{strat.description}</p>
+                  <h4 className="text-sm font-bold text-text-primary mt-0.5">{strat.strategyName || strat.name || 'Remediation Strategy'}</h4>
+                  <p className="text-xs text-text-secondary mt-1">{strat.description || 'Optimized remediation portfolio strategy'}</p>
                 </div>
 
                 <div className="p-4 space-y-3 flex-1 text-xs">
                   <div className="flex justify-between border-b border-app-border pb-2">
                     <span className="text-text-secondary">Budget Used:</span>
-                    <span className="font-bold text-text-primary">{formatCurrency(strat.totalCost, authoritativeCurrency)}</span>
+                    <span className="font-bold text-text-primary">{formatCurrency(strat.totalCost || 0, authoritativeCurrency)}</span>
                   </div>
 
                   <div className="flex justify-between border-b border-app-border pb-2">
                     <span className="text-text-secondary">Risk Score Reduction:</span>
-                    <span className="font-bold text-brand-primary">-{strat.totalRiskReduction.toFixed(1)} Pts</span>
+                    <span className="font-bold text-brand-primary">-{(strat.totalRiskReduction || 0).toFixed(1)} Pts</span>
                   </div>
 
                   <div className="flex justify-between border-b border-app-border pb-2">
                     <span className="text-text-secondary">Modeled EAL Benefit:</span>
-                    <span className="font-bold text-sky-700">{formatCurrency(strat.totalEalReduction, authoritativeCurrency)}</span>
+                    <span className="font-bold text-sky-700">{formatCurrency(strat.totalEalReduction || 0, authoritativeCurrency)}</span>
                   </div>
 
                   <div className="flex justify-between border-b border-app-border pb-2">
                     <span className="text-text-secondary">Return on Investment (ROSI):</span>
                     <span className="font-extrabold text-emerald-600 text-sm">
-                      {strat.rosiPct ? `${strat.rosiPct.toFixed(0)}%` : '340%'}
+                      {strat.rosiPct ? `${strat.rosiPct.toFixed(0)}%` : strat.rosiRatio ? `${(strat.rosiRatio * 100).toFixed(0)}%` : '340%'}
                     </span>
                   </div>
 
                   <div className="pt-2">
                     <span className="text-[10px] font-bold text-text-muted uppercase block mb-1">Included Remediation Actions:</span>
                     <ul className="space-y-1 text-text-secondary">
-                      {strat.selectedActions.map(act => (
-                        <li key={act.actionId} className="flex items-center">
+                      {(strat.selectedActions || []).map((act: any, aIdx: number) => (
+                        <li key={act.actionId || aIdx} className="flex items-center">
                           <CheckCircle className="w-3 h-3 text-emerald-500 mr-1.5 flex-shrink-0" />
-                          <span className="truncate">{act.title}</span>
+                          <span className="truncate">{act.title || act.actionId || 'Remediation Action'}</span>
                         </li>
                       ))}
                     </ul>

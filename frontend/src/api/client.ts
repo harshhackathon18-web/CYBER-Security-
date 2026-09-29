@@ -738,7 +738,7 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
   // Intercept and return authoritative fallback data for standalone Vercel deployments
   const cleanPath = url.split('?')[0];
   
-  if (options.method === 'POST' && url.includes('/optimization/solve')) {
+  if (options.method === 'POST' && url.includes('optimization/solve')) {
     const bodyStr = typeof options.body === 'string' ? options.body : '{}';
     let budget = 2500000;
     try {
@@ -746,29 +746,93 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
       budget = Number(b.budgetLimit || b.budget || 2500000);
     } catch {}
     
+    const action1 = {
+      actionId: 'act-edr-mumbai-upi-01',
+      title: 'Upgrade EDR Sensor to Active Blocking Mode on Mumbai UPI Gateway',
+      actionType: 'IMPLEMENT_CONTROL',
+      targetAssetId: 'mumbai-upi-switch-01.apexbank.internal',
+      controlCode: 'EDR_ACTIVE',
+      cost: 1500000,
+      estimatedRiskReduction: 38.5,
+      estimatedEalReduction: 1250000,
+    };
+
+    const action2 = {
+      actionId: 'act-patch-log4j-cbs-01',
+      title: 'Patch Critical Apache Log4j (CVE-2021-44228) on Bengaluru Core Banking DB',
+      actionType: 'PATCH_VULNERABILITY',
+      targetAssetId: 'bengaluru-cbs-db-cluster.apexbank.internal',
+      targetCveId: 'CVE-2021-44228',
+      cost: 2500000,
+      estimatedRiskReduction: 42.0,
+      estimatedEalReduction: 1850000,
+    };
+
+    const action3 = {
+      actionId: 'act-segment-delhi-hq-01',
+      title: 'Micro-segment Network Path between Delhi Edge Proxy and Hyderabad DC',
+      actionType: 'ISOLATE_ASSET',
+      targetAssetId: 'delhi-netbanking-proxy.apexbank.internal',
+      controlCode: 'SEGMENTATION',
+      cost: 3500000,
+      estimatedRiskReduction: 28.0,
+      estimatedEalReduction: 980000,
+    };
+
     return {
       success: true,
       data: {
+        optimizationResultId: `opt-${Date.now()}`,
         budgetLimit: budget,
         currency: 'INR',
+        evaluatedAt: new Date().toISOString(),
+        modelVersion: 'v1.4-production',
+        totalCandidates: 3,
         strategies: [
           {
-            id: 'STRATEGY_A_MAX_REDUCTION',
-            name: 'Strategy A: Maximum Risk & Loss Reduction',
-            selectedActionIds: ['act-patch-log4j-cbs-01'],
+            strategyId: 'STRATEGY_A_MAX_REDUCTION',
+            strategyName: 'Strategy A: Maximum Risk & Loss Reduction',
+            strategyType: 'MAX_REDUCTION',
+            description: 'Prioritizes highest enterprise risk & EAL loss reduction within allocated budget.',
+            selectedActions: [action2, action1],
             totalCost: Math.min(budget, 2500000),
+            remainingBudget: Math.max(0, budget - 2500000),
             totalRiskReduction: 42.0,
             totalEalReduction: 1850000,
-            rosiRatio: 3.2,
+            netFinancialBenefit: 1850000 - Math.min(budget, 2500000),
+            rosiPct: 340,
+            rosiRatio: 3.4,
+            actionCount: 2,
           },
           {
-            id: 'STRATEGY_B_BALANCED_ROSI',
-            name: 'Strategy B: Optimal ROSI Capital Efficiency',
-            selectedActionIds: ['act-edr-mumbai-upi-01'],
+            strategyId: 'STRATEGY_B_BALANCED_ROSI',
+            strategyName: 'Strategy B: Optimal ROSI Capital Efficiency',
+            strategyType: 'MAX_ROSI',
+            description: 'Maximizes Return on Security Investment (ROSI) ratio for maximum capital efficiency.',
+            selectedActions: [action1],
             totalCost: Math.min(budget, 1500000),
+            remainingBudget: Math.max(0, budget - 1500000),
             totalRiskReduction: 38.5,
             totalEalReduction: 1250000,
+            netFinancialBenefit: 1250000 - Math.min(budget, 1500000),
+            rosiPct: 450,
             rosiRatio: 4.5,
+            actionCount: 1,
+          },
+          {
+            strategyId: 'STRATEGY_C_BALANCED_COMPREHENSIVE',
+            strategyName: 'Strategy C: Balanced Defense-in-Depth Strategy',
+            strategyType: 'BALANCED',
+            description: 'Combines endpoint EDR blocking, critical patching, and network segmentation.',
+            selectedActions: [action1, action3],
+            totalCost: Math.min(budget, 5000000),
+            remainingBudget: Math.max(0, budget - 5000000),
+            totalRiskReduction: 66.5,
+            totalEalReduction: 2230000,
+            netFinancialBenefit: 2230000 - Math.min(budget, 5000000),
+            rosiPct: 290,
+            rosiRatio: 2.9,
+            actionCount: 2,
           },
         ],
       },
