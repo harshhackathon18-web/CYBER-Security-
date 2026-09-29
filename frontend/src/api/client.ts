@@ -1200,6 +1200,307 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
       }
     } as unknown as T;
   }
+
+  if (url.includes('/assets')) {
+    const ALL_ENTERPRISE_ASSETS = [
+      {
+        id: 'asset-mumbai-edge-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-gateways',
+        assetIdentifier: 'AST-GW-01',
+        name: 'mumbai-edge-api-gateway',
+        hostname: 'gw-mumbai.bharatfin.in',
+        ipAddress: '192.168.1.1',
+        assetType: 'Gateway',
+        environment: 'Production',
+        owner: 'Edge Security Operations',
+        isInternetFacing: true,
+        businessCriticality: 3,
+        criticality: 'MEDIUM',
+        dataClassification: 'INTERNAL',
+        revenueDependencyPct: 15.0,
+        operationalImportance: 3,
+        businessRevenueValueInr: 150000000,
+        associatedCveCount: 2,
+        implementedControlCount: 4,
+        metadata: { cveCount: 2, controlCount: 4 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-delhi-banking-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-web',
+        assetIdentifier: 'AST-WEB-01',
+        name: 'delhi-public-banking-portal',
+        hostname: 'netbanking.bharatfin.in',
+        ipAddress: '192.168.10.2',
+        assetType: 'Web Server',
+        environment: 'Production',
+        owner: 'Digital Banking Team',
+        isInternetFacing: true,
+        businessCriticality: 4,
+        criticality: 'HIGH',
+        dataClassification: 'CONFIDENTIAL',
+        revenueDependencyPct: 35.0,
+        operationalImportance: 4,
+        businessRevenueValueInr: 350000000,
+        associatedCveCount: 3,
+        implementedControlCount: 3,
+        metadata: { cveCount: 3, controlCount: 3 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-bengaluru-auth-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-auth',
+        assetIdentifier: 'AST-APP-01',
+        name: 'bengaluru-auth-microservice',
+        hostname: 'auth-app.internal.bharatfin.in',
+        ipAddress: '192.168.2.10',
+        assetType: 'Application Server',
+        environment: 'Production',
+        owner: 'Identity & Access Team',
+        isInternetFacing: false,
+        businessCriticality: 4,
+        criticality: 'HIGH',
+        dataClassification: 'CONFIDENTIAL',
+        revenueDependencyPct: 20.0,
+        operationalImportance: 4,
+        businessRevenueValueInr: 200000000,
+        associatedCveCount: 1,
+        implementedControlCount: 5,
+        metadata: { cveCount: 1, controlCount: 5 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-pune-swift-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-swift',
+        assetIdentifier: 'AST-MID-01',
+        name: 'pune-swift-integration-gateway',
+        hostname: 'swift-choke.internal.bharatfin.in',
+        ipAddress: '192.168.5.8',
+        assetType: 'Middleware',
+        environment: 'Production',
+        owner: 'SWIFT Integration Group',
+        isInternetFacing: false,
+        businessCriticality: 5,
+        criticality: 'MISSION_CRITICAL',
+        dataClassification: 'RESTRICTED',
+        revenueDependencyPct: 40.0,
+        operationalImportance: 5,
+        businessRevenueValueInr: 400000000,
+        associatedCveCount: 4,
+        implementedControlCount: 4,
+        metadata: { cveCount: 4, controlCount: 4 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-chennai-switch-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-payments',
+        assetIdentifier: 'AST-PAY-01',
+        name: 'chennai-core-payment-switch',
+        hostname: 'pay-switch.internal.bharatfin.in',
+        ipAddress: '192.168.3.14',
+        assetType: 'Payment Gateway',
+        environment: 'Production',
+        owner: 'Payments Settlement Team',
+        isInternetFacing: false,
+        businessCriticality: 5,
+        criticality: 'MISSION_CRITICAL',
+        dataClassification: 'RESTRICTED',
+        revenueDependencyPct: 60.0,
+        operationalImportance: 5,
+        businessRevenueValueInr: 600000000,
+        associatedCveCount: 3,
+        implementedControlCount: 5,
+        metadata: { cveCount: 3, controlCount: 5 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-hyderabad-db-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-database',
+        assetIdentifier: 'AST-DB-01',
+        name: 'hyderabad-customer-db-cluster',
+        hostname: 'cust-db.internal.bharatfin.in',
+        ipAddress: '192.168.4.22',
+        assetType: 'Database Cluster',
+        environment: 'Production',
+        owner: 'Core DB Admin Group',
+        isInternetFacing: false,
+        businessCriticality: 5,
+        criticality: 'MISSION_CRITICAL',
+        dataClassification: 'RESTRICTED',
+        revenueDependencyPct: 50.0,
+        operationalImportance: 5,
+        businessRevenueValueInr: 500000000,
+        associatedCveCount: 2,
+        implementedControlCount: 5,
+        metadata: { cveCount: 2, controlCount: 5 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-upi-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-payments',
+        assetIdentifier: 'AST-UPI-01',
+        name: 'mumbai-upi-switch-01',
+        hostname: 'mumbai-upi-switch-01.apexbank.internal',
+        ipAddress: '192.168.1.10',
+        assetType: 'Payment Gateway',
+        environment: 'Production',
+        owner: 'Payments Infra Ops',
+        isInternetFacing: true,
+        businessCriticality: 5,
+        criticality: 'MISSION_CRITICAL',
+        dataClassification: 'RESTRICTED',
+        revenueDependencyPct: 45.0,
+        operationalImportance: 5,
+        businessRevenueValueInr: 250000000,
+        associatedCveCount: 3,
+        implementedControlCount: 4,
+        metadata: { cveCount: 3, controlCount: 4 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-cbs-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-core-banking',
+        assetIdentifier: 'AST-CBS-01',
+        name: 'bengaluru-cbs-db-cluster',
+        hostname: 'bengaluru-cbs-db-cluster.apexbank.internal',
+        ipAddress: '192.168.2.15',
+        assetType: 'Database Cluster',
+        environment: 'Production',
+        owner: 'Database Admins',
+        isInternetFacing: false,
+        businessCriticality: 5,
+        criticality: 'MISSION_CRITICAL',
+        dataClassification: 'CONFIDENTIAL',
+        revenueDependencyPct: 60.0,
+        operationalImportance: 5,
+        businessRevenueValueInr: 500000000,
+        associatedCveCount: 2,
+        implementedControlCount: 5,
+        metadata: { cveCount: 2, controlCount: 5 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-proxy-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-digital-banking',
+        assetIdentifier: 'AST-NET-01',
+        name: 'delhi-netbanking-proxy',
+        hostname: 'delhi-netbanking-proxy.apexbank.internal',
+        ipAddress: '192.168.10.4',
+        assetType: 'Gateway',
+        environment: 'Production',
+        owner: 'Edge Security Team',
+        isInternetFacing: true,
+        businessCriticality: 4,
+        criticality: 'HIGH',
+        dataClassification: 'INTERNAL',
+        revenueDependencyPct: 25.0,
+        operationalImportance: 4,
+        businessRevenueValueInr: 120000000,
+        associatedCveCount: 4,
+        implementedControlCount: 3,
+        metadata: { cveCount: 4, controlCount: 3 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'asset-wiki-01',
+        organizationId: 'org-bharat-fin',
+        businessUnitId: 'bu-corp-it',
+        assetIdentifier: 'AST-WIKI-01',
+        name: 'confluence-wiki',
+        hostname: 'confluence-wiki.apexbank.internal',
+        ipAddress: '192.168.12.8',
+        assetType: 'Application Server',
+        environment: 'Internal',
+        owner: 'IT Ops Team',
+        isInternetFacing: false,
+        businessCriticality: 3,
+        criticality: 'MEDIUM',
+        dataClassification: 'INTERNAL',
+        revenueDependencyPct: 10.0,
+        operationalImportance: 3,
+        businessRevenueValueInr: 50000000,
+        associatedCveCount: 1,
+        implementedControlCount: 4,
+        metadata: { cveCount: 1, controlCount: 4 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+
+    let page = 1;
+    let limit = 25;
+    let search = '';
+    let assetType = '';
+    let businessCriticality: number | null = null;
+    let isInternetFacing: boolean | null = null;
+
+    try {
+      const urlObj = new URL(url, 'http://localhost');
+      page = parseInt(urlObj.searchParams.get('page') || '1', 10);
+      limit = parseInt(urlObj.searchParams.get('limit') || '25', 10);
+      search = (urlObj.searchParams.get('search') || '').toLowerCase();
+      assetType = (urlObj.searchParams.get('assetType') || '').toLowerCase();
+      const crit = urlObj.searchParams.get('businessCriticality');
+      if (crit) businessCriticality = parseInt(crit, 10);
+      const net = urlObj.searchParams.get('isInternetFacing');
+      if (net !== null && net !== undefined && net !== '') {
+        isInternetFacing = net === 'true';
+      }
+    } catch {}
+
+    let filtered = ALL_ENTERPRISE_ASSETS;
+
+    if (search) {
+      filtered = filtered.filter(a =>
+        a.name.toLowerCase().includes(search) ||
+        a.hostname.toLowerCase().includes(search) ||
+        a.ipAddress.toLowerCase().includes(search)
+      );
+    }
+
+    if (assetType) {
+      filtered = filtered.filter(a => a.assetType.toLowerCase().includes(assetType));
+    }
+
+    if (businessCriticality !== null) {
+      filtered = filtered.filter(a => a.businessCriticality === businessCriticality);
+    }
+
+    if (isInternetFacing !== null) {
+      filtered = filtered.filter(a => a.isInternetFacing === isInternetFacing);
+    }
+
+    const total = filtered.length;
+    const start = (page - 1) * limit;
+    const pageItems = filtered.slice(start, start + limit);
+
+    return {
+      data: pageItems,
+      items: pageItems,
+      total,
+      totalCount: total,
+      page,
+      limit,
+    } as unknown as T;
+  }
   
   if (options.method === 'POST' && url.includes('optimization/solve')) {
     const bodyStr = typeof options.body === 'string' ? options.body : '{}';
