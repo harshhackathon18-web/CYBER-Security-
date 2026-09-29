@@ -455,20 +455,100 @@ const FALLBACK_DATA: Record<string, any> = {
     ],
   },
   '/api/v1/risk/scores': {
-    data: {
-      overallRiskScore: 64.2,
-      riskLevel: 'HIGH',
-      currency: 'INR',
-      evaluatedAssetsCount: 6,
-      businessUnits: [
-        { unitName: 'NetBanking & Mobile Gateway', score: 72.5, level: 'HIGH' },
-        { unitName: 'Core Banking Switch & Ledger', score: 58.0, level: 'MEDIUM' },
-        { unitName: 'UPI Payments & Merchant Settlement', score: 65.4, level: 'HIGH' },
-      ],
+    items: [
+      {
+        id: 'risk-upi-log4j-01',
+        assetId: 'asset-upi-01',
+        assetName: 'Mumbai UPI Payment Switch Gateway',
+        cveId: 'CVE-2021-44228',
+        score: 94.5,
+        level: 'CRITICAL',
+        severity: 'CRITICAL',
+        dataCompleteness: 0.95,
+        dataCompletenessScore: 0.95,
+        inputProvenanceHash: 'sha256-a1b2c3d4e5f67890',
+        baseCvss: 10.0,
+        modelVersion: 'v1.4.0',
+        evaluatedAt: new Date().toISOString(),
+        factors: [
+          { name: 'Base CVSS Score', category: 'TECHNICAL_SEVERITY', value: 10.0, weight: 0.35, contribution: 3.5, rationale: 'Unauthenticated Remote Code Execution in Log4j2 JNDI.' },
+          { name: 'CISA KEV Active Exploitation', category: 'THREAT_INTEL', value: 'ACTIVE_EXPLOIT', weight: 0.25, contribution: 2.5, rationale: 'Active ransomware campaigns actively weaponizing Log4Shell.' },
+          { name: 'Asset Business Criticality', category: 'BUSINESS_IMPACT', value: 'Level 5 (Critical)', weight: 0.25, contribution: 2.5, rationale: 'Processes high-volume UPI transactions and payments.' },
+          { name: 'Control Status', category: 'SECURITY_CONTROLS', value: 'PARTIAL', weight: 0.15, contribution: 0.95, rationale: 'EDR present in audit-only mode; Egress drop filter not active.' }
+        ]
+      },
+      {
+        id: 'risk-cbs-confluence-01',
+        assetId: 'asset-cbs-01',
+        assetName: 'Bengaluru Core Banking Database Cluster',
+        cveId: 'CVE-2023-22515',
+        score: 88.0,
+        level: 'CRITICAL',
+        severity: 'CRITICAL',
+        dataCompleteness: 0.92,
+        dataCompletenessScore: 0.92,
+        inputProvenanceHash: 'sha256-cbs-hash-9901',
+        baseCvss: 10.0,
+        modelVersion: 'v1.4.0',
+        evaluatedAt: new Date().toISOString(),
+        factors: [
+          { name: 'Base CVSS Score', category: 'TECHNICAL_SEVERITY', value: 10.0, weight: 0.35, contribution: 3.5, rationale: 'Atlassian Confluence Privilege Escalation RCE.' },
+          { name: 'CISA KEV Active Exploitation', category: 'THREAT_INTEL', value: 'ACTIVE_EXPLOIT', weight: 0.25, contribution: 2.5, rationale: 'CISA KEV catalog listed unauthenticated admin creation.' },
+          { name: 'Asset Business Criticality', category: 'BUSINESS_IMPACT', value: 'Level 5 (Critical)', weight: 0.25, contribution: 2.5, rationale: 'Core banking transaction ledger and database.' },
+          { name: 'Control Status', category: 'SECURITY_CONTROLS', value: 'IMPLEMENTED', weight: 0.15, contribution: 0.3, rationale: 'MFA and DB audit logging active.' }
+        ]
+      },
+      {
+        id: 'risk-proxy-spring-01',
+        assetId: 'asset-proxy-01',
+        assetName: 'Delhi NetBanking API Gateway Proxy',
+        cveId: 'CVE-2022-22965',
+        score: 79.2,
+        level: 'HIGH',
+        severity: 'HIGH',
+        dataCompleteness: 0.90,
+        dataCompletenessScore: 0.90,
+        inputProvenanceHash: 'sha256-proxy-hash-4412',
+        baseCvss: 9.8,
+        modelVersion: 'v1.4.0',
+        evaluatedAt: new Date().toISOString(),
+        factors: [
+          { name: 'Base CVSS Score', category: 'TECHNICAL_SEVERITY', value: 9.8, weight: 0.35, contribution: 3.43, rationale: 'Spring4Shell Data Binding RCE.' },
+          { name: 'Asset Business Criticality', category: 'BUSINESS_IMPACT', value: 'Level 4 (High)', weight: 0.25, contribution: 2.0, rationale: 'Customer NetBanking API proxy router.' },
+          { name: 'Control Status', category: 'SECURITY_CONTROLS', value: 'IMPLEMENTED', weight: 0.15, contribution: 0.4, rationale: 'WAF and edge proxy rate limiting active.' }
+        ]
+      },
+      {
+        id: 'risk-wiki-openssl-01',
+        assetId: 'asset-wiki-01',
+        assetName: 'Internal Atlassian Confluence Knowledge Base',
+        cveId: 'CVE-2022-3602',
+        score: 54.0,
+        level: 'MEDIUM',
+        severity: 'MEDIUM',
+        dataCompleteness: 0.88,
+        dataCompletenessScore: 0.88,
+        inputProvenanceHash: 'sha256-wiki-hash-1102',
+        baseCvss: 7.5,
+        modelVersion: 'v1.4.0',
+        evaluatedAt: new Date().toISOString(),
+        factors: [
+          { name: 'Base CVSS Score', category: 'TECHNICAL_SEVERITY', value: 7.5, weight: 0.35, contribution: 2.62, rationale: 'OpenSSL X.509 Email Address Buffer Overflow.' },
+          { name: 'Asset Business Criticality', category: 'BUSINESS_IMPACT', value: 'Level 3 (Medium)', weight: 0.25, contribution: 1.5, rationale: 'Internal IT knowledge base.' },
+          { name: 'Control Status', category: 'SECURITY_CONTROLS', value: 'IMPLEMENTED', weight: 0.15, contribution: 0.5, rationale: 'Internal network isolation enforced.' }
+        ]
+      }
+    ],
+    total: 4,
+    pagination: {
+      page: 1,
+      limit: 100,
+      total: 4,
+      totalPages: 1
     },
-    overallRiskScore: 64.2,
+    overallRiskScore: 78.9,
     riskLevel: 'HIGH',
-    evaluatedAssetsCount: 6,
+    evaluatedAssetsCount: 4,
   },
   '/api/v1/financial/exposure': {
     data: {

@@ -124,7 +124,9 @@ export const RiskOverview: React.FC = () => {
     }
   };
 
-  // Standby initial state: calculation results only appear after clicking Recalculate Model Live
+  React.useEffect(() => {
+    fetchRiskData(false);
+  }, []);
 
   const toggleRow = (key: string) => {
     if (expandedRows[key]) {
@@ -155,7 +157,8 @@ export const RiskOverview: React.FC = () => {
     );
   }
 
-  const allItems = data?.items || [];
+  const rawItems = data?.items || (Array.isArray(data?.data) ? data.data : []);
+  const allItems = Array.isArray(rawItems) ? rawItems : [];
 
   const items = allItems.filter(item => {
     if (selectedSectorFilter === 'ALL') return true;
